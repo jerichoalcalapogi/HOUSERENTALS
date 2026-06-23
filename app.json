@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Findora Homes",
+    "slug": "findora-homes",
+    "icon": "./assets/green.png",
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ]
+  }
+}
