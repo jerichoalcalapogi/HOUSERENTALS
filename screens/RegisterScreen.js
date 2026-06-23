@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -9,31 +9,39 @@ import {
   KeyboardAvoidingView,
   Platform,
   ImageBackground,
-<<<<<<< HEAD
-} from "react-native";
-
-import AsyncStorage from "@react-native-async-storage/async-storage";
-=======
-  Keyboard,
-  TouchableWithoutFeedback,
+  Animated,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
->>>>>>> 410b0891 (finals)
 
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-<<<<<<< HEAD
-=======
   const [showPassword, setShowPassword] = useState(false);
->>>>>>> 410b0891 (finals)
+
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const backgroundImage = require("../assets/aa.jpg");
 
+  const togglePassword = () => {
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 0.85,
+        duration: 80,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 120,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    setShowPassword(!showPassword);
+  };
+
   const handleRegister = async () => {
-<<<<<<< HEAD
     if (!name || !email || !password) {
       Alert.alert("Missing Information", "Please complete all fields");
       return;
@@ -80,7 +88,7 @@ export default function RegisterScreen({ navigation }) {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        {/* HEADER */}
+        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.logo}>🏡</Text>
           <Text style={styles.brand}>Join Findora Homes</Text>
@@ -99,8 +107,14 @@ export default function RegisterScreen({ navigation }) {
             Register to start renting houses easily
           </Text>
 
+          {/* Name */}
           <View style={styles.inputBox}>
-            <Text style={styles.icon}>👤</Text>
+            <Ionicons
+              name="person-outline"
+              size={20}
+              color="#555"
+              style={styles.icon}
+            />
             <TextInput
               placeholder="Full Name"
               placeholderTextColor="#888"
@@ -110,34 +124,71 @@ export default function RegisterScreen({ navigation }) {
             />
           </View>
 
+          {/* Email */}
           <View style={styles.inputBox}>
-            <Text style={styles.icon}>📧</Text>
+            <Ionicons
+              name="mail-outline"
+              size={20}
+              color="#555"
+              style={styles.icon}
+            />
             <TextInput
               placeholder="Email Address"
               placeholderTextColor="#888"
               style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize="none"
               value={email}
               onChangeText={setEmail}
             />
           </View>
 
+          {/* Password */}
           <View style={styles.inputBox}>
-            <Text style={styles.icon}>🔒</Text>
+            <Ionicons
+              name="lock-closed-outline"
+              size={20}
+              color="#555"
+              style={styles.icon}
+            />
+
             <TextInput
               placeholder="Password"
               placeholderTextColor="#888"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               style={styles.input}
               value={password}
               onChangeText={setPassword}
             />
+
+            <Animated.View
+              style={{
+                transform: [{ scale: scaleAnim }],
+              }}
+            >
+              <TouchableOpacity
+                onPress={togglePassword}
+                style={styles.eyeBtn}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-off-outline" : "eye-outline"}
+                  size={22}
+                  color="#555"
+                />
+              </TouchableOpacity>
+            </Animated.View>
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleRegister}
+          >
             <Text style={styles.buttonText}>CREATE ACCOUNT</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Login")}
+          >
             <Text style={styles.loginText}>
               Already have an account?
               <Text style={styles.link}> Login</Text>
@@ -145,187 +196,37 @@ export default function RegisterScreen({ navigation }) {
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </View>
-=======
-  if (!name || !email || !password) {
-    Alert.alert("Missing Information", "Please complete all fields");
-    return;
-  }
-
-  // 🔥 PASSWORD VALIDATION (8 CHARACTERS MINIMUM)
-  if (password.length < 8) {
-    Alert.alert(
-      "Weak Password",
-      "Password must be at least 8 characters long"
-    );
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      "http://192.168.10.240/house_rental_api/register.php",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
-      }
-    );
-
-    const text = await response.text();
-    const data = JSON.parse(text);
-
-    if (data.success) {
-      Alert.alert("Success 🎉", data.message);
-      navigation.navigate("Login");
-    } else {
-      Alert.alert("Error", data.message);
-    }
-  } catch (error) {
-    Alert.alert("Server Error", "Cannot connect to backend");
-  }
-};
-
-  return (
-    <ImageBackground style={{ flex: 1 }} source={backgroundImage}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
-            {/* HEADER */}
-            <View style={styles.header}>
-              <Text style={styles.brand}>Join Findora Homes</Text>
-              <Text style={styles.subtitle}>
-                Create your account and find your new home
-              </Text>
-            </View>
-
-            {/* CARD */}
-            <View style={styles.card}>
-              <Text style={styles.title}>Create Account</Text>
-
-              <Text style={styles.description}>
-                Register to start renting houses easily
-              </Text>
-
-              {/* NAME */}
-              <View style={styles.inputBox}>
-                <TextInput
-                  placeholder="Full Name"
-                  placeholderTextColor="#888"
-                  style={styles.input}
-                  value={name}
-                  onChangeText={setName}
-                />
-              </View>
-
-              {/* EMAIL */}
-              <View style={styles.inputBox}>
-                <TextInput
-                  placeholder="Email Address"
-                  placeholderTextColor="#888"
-                  style={styles.input}
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
-              </View>
-
-              {/* PASSWORD */}
-              <View style={styles.inputBox}>
-                <TextInput
-                  placeholder="Password"
-                  placeholderTextColor="#888"
-                  secureTextEntry={!showPassword}
-                  style={styles.input}
-                  value={password}
-                  onChangeText={setPassword}
-                />
-
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={styles.eyeButton}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-off-outline" : "eye-outline"}
-                    size={22}
-                    color="#555"
-                  />
-                </TouchableOpacity>
-              </View>
-
-              {/* BUTTON */}
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleRegister}
-              >
-                <Text style={styles.buttonText}>CREATE ACCOUNT</Text>
-              </TouchableOpacity>
-
-              {/* LOGIN */}
-              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text style={styles.loginText}>
-                  Already have an account?
-                  <Text style={styles.link}> Login</Text>
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
->>>>>>> 410b0891 (finals)
     </ImageBackground>
   );
 }
 
-/* STYLES */
 const styles = StyleSheet.create({
-<<<<<<< HEAD
   background: {
     flex: 1,
   },
+
   overlay: {
     flex: 1,
     justifyContent: "center",
     padding: 20,
     backgroundColor: "rgba(0,0,0,0.35)",
-=======
-  container: {
-    flex: 1,
-    padding: 20,
-
-    // ❌ IMPORTANT: NO CENTERING (this caused movement)
-    justifyContent: "flex-start",
->>>>>>> 410b0891 (finals)
   },
 
   header: {
     alignItems: "center",
-<<<<<<< HEAD
     marginBottom: 25,
   },
+
   logo: {
     fontSize: 60,
   },
-=======
-    marginTop: 60,
-    marginBottom: 20,
-  },
 
->>>>>>> 410b0891 (finals)
   brand: {
     fontSize: 30,
     fontWeight: "bold",
     color: "#fff",
   },
-<<<<<<< HEAD
-=======
 
->>>>>>> 410b0891 (finals)
   subtitle: {
     color: "#D0FFD6",
     textAlign: "center",
@@ -336,11 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.95)",
     borderRadius: 25,
     padding: 25,
-<<<<<<< HEAD
     elevation: 8,
-=======
-    marginTop: 10,
->>>>>>> 410b0891 (finals)
   },
 
   title: {
@@ -349,10 +246,7 @@ const styles = StyleSheet.create({
     color: "#2E7D32",
     textAlign: "center",
   },
-<<<<<<< HEAD
-=======
 
->>>>>>> 410b0891 (finals)
   description: {
     textAlign: "center",
     color: "#777",
@@ -365,28 +259,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     borderRadius: 15,
     paddingHorizontal: 15,
+    height: 55,
     marginBottom: 15,
   },
-<<<<<<< HEAD
+
   icon: {
-    fontSize: 20,
     marginRight: 10,
   },
-=======
 
->>>>>>> 410b0891 (finals)
   input: {
     flex: 1,
-    paddingVertical: 15,
     fontSize: 16,
-<<<<<<< HEAD
-=======
-    color: "#333",
   },
 
-  eyeButton: {
-    paddingHorizontal: 10,
->>>>>>> 410b0891 (finals)
+  eyeBtn: {
+    paddingHorizontal: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   button: {
@@ -395,10 +284,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 10,
   },
-<<<<<<< HEAD
-=======
 
->>>>>>> 410b0891 (finals)
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
@@ -411,10 +297,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "#777",
   },
-<<<<<<< HEAD
-=======
 
->>>>>>> 410b0891 (finals)
   link: {
     color: "#2E7D32",
     fontWeight: "bold",

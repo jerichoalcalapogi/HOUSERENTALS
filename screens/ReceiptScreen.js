@@ -10,10 +10,7 @@ import {
 
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
-<<<<<<< HEAD
-=======
 import * as MediaLibrary from "expo-media-library";
->>>>>>> 410b0891 (finals)
 import { RentalsContext } from "../AppContext";
 
 export default function ReceiptScreen({ route }) {
@@ -26,9 +23,7 @@ export default function ReceiptScreen({ route }) {
 
   const receiptNumber = renter?.receiptNumber || `RN${Date.now()}`;
 
-<<<<<<< HEAD
-=======
-  // 🔥 ASK PERMISSION ON LOAD
+  // Ask permission once
   useEffect(() => {
     (async () => {
       const { status } = await MediaLibrary.requestPermissionsAsync();
@@ -41,7 +36,6 @@ export default function ReceiptScreen({ route }) {
     })();
   }, []);
 
->>>>>>> 410b0891 (finals)
   const saveReceipt = async () => {
     try {
       setLoading(true);
@@ -51,28 +45,24 @@ export default function ReceiptScreen({ route }) {
         return;
       }
 
-      // 1. CAPTURE SCREEN
+      // Capture receipt
       const uri = await captureRef(viewRef, {
         format: "png",
         quality: 1,
       });
 
-      // 2. SAVE TO GALLERY
+      // Save to gallery
       const asset = await MediaLibrary.createAssetAsync(uri);
 
-<<<<<<< HEAD
-      await addRental(house, renter);
-=======
-      // 3. CREATE ALBUM (optional but nice)
+      // Create album (optional)
       await MediaLibrary.createAlbumAsync("House Receipts", asset, false);
->>>>>>> 410b0891 (finals)
 
-      // 4. SHARE (optional)
+      // Share (optional)
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       }
 
-      // 5. SAVE TO APP STATE
+      // Save to app state
       await addRental(house, renter);
 
       Alert.alert("Success", "Receipt saved to Gallery 🏠");
@@ -86,13 +76,8 @@ export default function ReceiptScreen({ route }) {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
-      
-      {/* RECEIPT VIEW (THIS IS WHAT GETS SAVED) */}
       <View ref={viewRef} collapsable={false} style={styles.receipt}>
-<<<<<<< HEAD
-=======
         
->>>>>>> 410b0891 (finals)
         <View style={styles.topBar}>
           <View style={styles.badge}>
             <Text style={styles.badgeText}>RECEIPT</Text>
@@ -103,66 +88,14 @@ export default function ReceiptScreen({ route }) {
         <View style={styles.statusBox}>
           <Text style={styles.statusIcon}>✔</Text>
           <Text style={styles.statusTitle}>Confirmed</Text>
-<<<<<<< HEAD
-          <Text style={styles.statusSubtitle}>Your rental has been booked successfully</Text>
-=======
           <Text style={styles.statusSubtitle}>
             Your rental has been booked successfully
           </Text>
->>>>>>> 410b0891 (finals)
         </View>
 
         <View style={styles.summaryCard}>
           <Text style={styles.summaryLabel}>Receipt Number</Text>
           <Text style={styles.summaryValue}>{receiptNumber}</Text>
-<<<<<<< HEAD
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryText}>House</Text>
-            <Text style={styles.summaryText}>{house?.name || "--"}</Text>
-          </View>
-        </View>
-
-        <Text style={styles.sectionLabel}>Rental Details</Text>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Location</Text>
-          <Text style={styles.detailValue}>{house?.location || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Rent</Text>
-          <Text style={styles.detailValue}>{house?.price || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Bedrooms</Text>
-          <Text style={styles.detailValue}>{house?.bedrooms || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Bathrooms</Text>
-          <Text style={styles.detailValue}>{house?.bathrooms || "--"}</Text>
-        </View>
-
-        <Text style={styles.sectionLabel}>Guest Details</Text>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Name</Text>
-          <Text style={styles.detailValue}>{renter?.fullName || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Email</Text>
-          <Text style={styles.detailValue}>{renter?.email || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Contact</Text>
-          <Text style={styles.detailValue}>{renter?.contactNumber || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Move-in</Text>
-          <Text style={styles.detailValue}>{renter?.moveInDate || "--"}</Text>
-        </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Duration</Text>
-          <Text style={styles.detailValue}>{renter?.rentalDuration || "--"}</Text>
-        </View>
-
-=======
 
           <View style={styles.summaryRow}>
             <Text style={styles.summaryText}>House</Text>
@@ -219,11 +152,9 @@ export default function ReceiptScreen({ route }) {
           <Text style={styles.detailValue}>{renter?.rentalDuration || "--"}</Text>
         </View>
 
->>>>>>> 410b0891 (finals)
         <Text style={styles.footer}>Powered by House Rental</Text>
       </View>
 
-      {/* BUTTON */}
       <TouchableOpacity
         style={[styles.button, loading && { opacity: 0.6 }]}
         onPress={saveReceipt}
@@ -233,22 +164,12 @@ export default function ReceiptScreen({ route }) {
           {loading ? "Saving..." : "Save to Gallery"}
         </Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 }
 
-
-
-
-
-
-
-
-
-
-
 /* ================= STYLES ================= */
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -260,25 +181,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 18,
     padding: 24,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 8 },
     elevation: 8,
   },
 
   topBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
     marginBottom: 18,
   },
 
   badge: {
     backgroundColor: "#2E7D32",
-    borderRadius: 10,
     paddingVertical: 5,
     paddingHorizontal: 12,
+    borderRadius: 10,
   },
 
   badgeText: {
@@ -304,24 +220,18 @@ const styles = StyleSheet.create({
   statusIcon: {
     fontSize: 28,
     color: "#2E7D32",
-    marginBottom: 10,
   },
 
   statusTitle: {
     fontSize: 20,
     fontWeight: "700",
     color: "#2E7D32",
-    marginBottom: 6,
   },
 
   statusSubtitle: {
     fontSize: 14,
     color: "#4b6c4f",
     textAlign: "center",
-<<<<<<< HEAD
-    lineHeight: 20,
-=======
->>>>>>> 410b0891 (finals)
   },
 
   summaryCard: {
@@ -332,23 +242,16 @@ const styles = StyleSheet.create({
   },
 
   summaryLabel: {
-<<<<<<< HEAD
-    color: "#4b6c4f",
-    fontSize: 12,
-    fontWeight: "700",
-    marginBottom: 6,
-=======
     fontSize: 12,
     fontWeight: "700",
     color: "#4b6c4f",
->>>>>>> 410b0891 (finals)
   },
 
   summaryValue: {
     fontSize: 18,
     fontWeight: "700",
     color: "#1f4f1f",
-    marginBottom: 12,
+    marginBottom: 10,
   },
 
   summaryRow: {
@@ -366,44 +269,33 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     color: "#1f4f1f",
-<<<<<<< HEAD
-=======
-    marginTop: 10,
->>>>>>> 410b0891 (finals)
-    marginBottom: 10,
+    marginVertical: 10,
   },
 
   detailRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#dcf2db",
   },
 
   detailLabel: {
-    color: "#4b6c4f",
-    fontSize: 14,
     width: "45%",
+    color: "#4b6c4f",
   },
 
   detailValue: {
-    color: "#1f3d1f",
-    fontSize: 14,
-    fontWeight: "600",
     width: "50%",
     textAlign: "right",
+    fontWeight: "600",
+    color: "#1f3d1f",
   },
 
   footer: {
-    marginTop: 20,
     textAlign: "center",
+    marginTop: 20,
     color: "#4b6c4f",
-    fontSize: 13,
-<<<<<<< HEAD
-    lineHeight: 18,
-=======
->>>>>>> 410b0891 (finals)
   },
 
   button: {
